@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css" media="screen,projection" />
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+
+    <div class="row">
+
+
+        <div class="col s2 hide-on-small-only">
+            <div class="pinned">
+                <h5>Documentation</h5>
+                <ul class="section table-of-contents">
+                    <li><a href="#prologue">Prologue</a></li>
+                    <li><a href="#started">Get Started</a></li>
+                    <li><a href="#deploy">Deploy Laravel VPS</a></li>
+                    <li><a href="#cpanel">Deploy Laravel Cpanel</a></li>
+                    <li><a href="#using">Using Admin Panel</a></li>
+                    <li><a href="#tmdb">Set up ThemovieDB</a></li>
+                    <li><a href="#firebase">Set up Firebase</a></li>
+                    <li><a href="#admob">Set up Admob</a></li>
+                    <li><a href="#flutter">Install Flutter</a></li>
+                    <li><a href="#keystore">Create Keystore</a></li>
+                    <li><a href="#app">Set up App</a></li>
+                    <li><a href="#icons">Build Icons</a></li>
+                    <li><a href="#build">Build App</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="col s10">
+            <div id="prologue" class="section scrollspy">
+                <h3>Prologue</h3>
+                <h5>Streamapp Documentation by <a href="https://codecanyon.net/user/jennsenr"
+                        target="_blank">jennsenr</a> v1.0</h5>
+                <blockquote>
+                    Streamapp <br>
+                    Created: 8/24/2019 <br>
+                    By: Jennsen Ramos <br>
+                    Email: jennsenr@gmail.com</blockquote>
+
+                <p>Thank you for purchasing my script. If you have any questions that are beyond the scope of this help
+                    file, please feel free to email via my user page contact form <a
+                        href="https://codecanyon.net/user/jennsenr" target="_blank">here</a>. Thanks so much!</p>
+            </div>
+            <div id="started" class="section scrollspy">
+                <h3>Get Started</h3>
+                <p><a href="https://en.wikipedia.org/wiki/Virtual_private_server" target="_blank">VPS</a> with <a
+                        href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)" target="_blank">LAMP</a> stack is
+                    required, <a href="http://digitalocean.com/" target="_blank">DigitalOcean</a> recommended.</p>
+
+                <p>I will use DigitalOcean, to start we must create a new <a
+                        href="https://www.digitalocean.com/docs/droplets/" target="_blank">droplet</a>, selecting the
+                    LAMP
+                    image
+                    and choosing the <a href="https://en.wikipedia.org/wiki/Data_center" target="_blank">datacenter</a>
+                    nearby to our
+                    main traffic.</p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/new-droplet.mp4" type="video/mp4">
+                </video>
+
+                <p>The data will arrive by email. The ip of our VPS and the one that we will use to connect through <a
+                        href="https://en.wikipedia.org/wiki/Secure_Shell" target="_blank">SSH</a>, in MacOS and Linux
+                    can be connected
+                    from the terminal, in windows I recommend <a
+                        href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">PUTTY.</a>
+                </p>
+                <img class="responsive-img" src="./assets/images/droplet-data.png">
+
+                <p>we start putty, paste the IP of our VPS and press open.</p>
+                <img class="responsive-img" src="./assets/images/putty-open.png">
+
+                <p>To log in we must enter the username and password that comes to the email along with the IP.
+                    Note: the password field is not visible but you are receiving the data. To paste press right click
+                    or CTRL + INSERT</p>
+                <img class="responsive-img" src="./assets/images/putty-login.png">
+
+                <p>When we start for the first time we are asked to change the password, we must enter the password we
+                    use to log in again, then we will be asked for a new password and confirm it.</p>
+                <img class="responsive-img" src="./assets/images/putty-change-password.png">
+
+                <p>We will get the mysql password running the command
+                    <blockquote>sudo nano /root/.digitalocean_password</blockquote>
+                </p>
+                <img class="responsive-img" src="./assets/images/mysql.png">
+
+                <p>Copy the password somewhere, we close with CTRL + X.</p>
+                <img class="responsive-img" src="./assets/images/mysql-password.png">
+
+                <p>We access the MySQL command line by running mysql -u root -p, we will be asked for the password we
+                    copied in the previous step.</p>
+                <img class="responsive-img" src="./assets/images/mysql-command-line.png">
+
+                <p>we will create a user with the necessary permissions, you can change admin for your user and 123456
+                    for your password <br>
+                    <code>GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' IDENTIFIED BY '123456';</code></p>
+                <img class="responsive-img" src="./assets/images/mysql-create-user.png">
+
+                <p>We will also create the database that we will use, you can change streamapp for your brand name. <br>
+                    <code>create database streamapp;</code><br>
+                    and we go out with <code>exit;</code></p>
+                <img class="responsive-img" src="./assets/images/mysql-create-database.png">
+
+                <p>We update the packages before continuing.</p>
+                <blockquote>sudo apt-get update <br>
+                    sudo apt-get dist-upgrade</blockquote>
+
+            </div>
+            <div id="deploy" class="section scrollspy">
+                <h3>Deploy Laravel</h3>
+
+                <p>Now we need to connect to the <a href="https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol"
+                        target="_blank">SFTP</a> and upload the files,
+                    for that we will have to download and start <a
+                        href="https://filezilla-project.org/download.php?type=client" target="_blank">Filezilla</a>,
+                    click on file ->
+                    site manager -> new site. in protocol select SFTP - SSH file transfer protocol, in host enter the IP
+                    of the VPS, write the user and press connect. In the pop-up window enter the password and press ok.
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/ftp-connect.mp4" type="video/mp4">
+                </video>
+
+                <p>We go to the /var/www directory and drag the laravel folder that we get by unzipping the ZIP of the
+                    project. (This folder contains your API Rest Laravel and admin panel Vue.js)</p>
+                <img class="responsive-img" src="./assets/images/ftp-upload.png">
+
+                <p>to install the Laravel dependencies we will need to composer, we return to PUTTY and run these
+                    commands.</p>
+                <blockquote>
+                    sudo apt-get install php-gd php-xml php7.2-mbstring <br>
+                    curl -sS https://getcomposer.org/installer | php <br>
+                    sudo mv composer.phar /usr/local/bin/composer</blockquote>
+
+                <p>We go to the /var/www/laravel directory, and execute the
+                    <blockquote>composer install</blockquote>
+                    after that we assign the necessary permissions to the storage folder.
+                    <blockquote>sudo chown -R www-data: storage <br>
+                        sudo chmod -R 755 storage</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/composer-install.mp4" type="video/mp4">
+                </video>
+
+                <p>To configure the environment variables of our project we must execute:
+
+                    <blockquote>
+                        cp .env.example .env <br>
+                        sudo nano .env
+                    </blockquote>
+
+                    and edit the following variables:
+
+                    <blockquote>
+                        APP_NAME = your brand name <br>
+                        DB_DATABASE = the database we created previously <br>
+                        DB_USERNAME = the user we created previously <br>
+                        DB_PASSWORD = the user password
+                    </blockquote>
+
+                    CTRL + X to close and press Y to save changes. <br><br>
+
+                    to generate the APP_KEY we must execute
+
+                    <blockquote>
+                        php artisan key:generate
+                    </blockquote>
+
+                    After that we can run our migrations and seeders.
+
+                    <blockquote>
+                        php artisan migrate --seed
+                    </blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/laravel-env.mp4" type="video/mp4">
+                </video>
+
+
+                <p>Finally, we can only point the Apache root to the public folder of our Laravel project, to do this
+                    modify the virtual host file
+
+                    <blockquote>sudo nano /etc/apache2/sites-enabled/000-default.conf</blockquote>
+
+                    changing this
+
+                    <blockquote>
+                        DocumentRoot /var/www<br>
+                        &ltDirectory /var/www>
+                    </blockquote>
+
+                    For this
+
+                    <blockquote>
+                        DocumentRoot /var/www/laravel/public<br>
+                        &ltDirectory /var/www/laravel/public>
+                    </blockquote>
+
+                    Then add the following two lines inside of that same "Directory" tag:
+
+                    <blockquote>
+                        RewriteEngine On<br>
+                        RewriteBase /var/www/laravel/public
+                    </blockquote>
+
+                    <p>We must enable the Apache mod_rewrite module for the correct operation of the laravel routes:</p>
+                    <blockquote>sudo a2enmod rewrite</blockquote>
+
+                    Once that's finished and saved we need to restart Apache:
+
+                    <blockquote>sudo service apache2 restart</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/apache-conf.mp4" type="video/mp4">
+                </video>
+
+            </div>
+            <div id="cpanel" class="section scrollspy">
+                <h3>Deploy Laravel in Cpanel</h3>
+
+                <p>For this installation your hosting must allow all the necessary extensions.</p>
+
+                <blockquote>
+                    PHP >= 7.1.3 <br>
+                    BCMath PHP Extension <br>
+                    Ctype PHP Extension <br>
+                    JSON PHP Extension <br>
+                    Mbstring PHP Extension <br>
+                    OpenSSL PHP Extension <br>
+                    PDO PHP Extension <br>
+                    Tokenizer PHP Extension <br>
+                    XML PHP Extension <br>
+                    Apache/Nginx rewrite_module <br>
+                </blockquote>
+
+                <p>You need to download and install <a href="https://en.wikipedia.org/wiki/XAMPP">XAMPP</a> and <a
+                        href="https://en.wikipedia.org/wiki/Composer_(software)">Composer</a>
+
+                </p>
+                <blockquote>
+                    <a href="https://www.apachefriends.org/en/download.html"
+                        target="_blank">https://www.apachefriends.org/en/download.html</a> <br>
+                    <a href="https://getcomposer.org/download/" target="_blank">https://getcomposer.org/download/</a>
+                </blockquote>
+
+                <p>
+                    Once this is done, we have to:
+                </p>
+                <blockquote>
+
+                    1. Open the terminal and go to the Laravel project directory. <br>
+                    2. run <strong>composer install</strong> <br>
+                    3. Go to the Cpanel and click on MySQL Databases <br>
+                    4. Create a database, create a user, assign the user to the database with all permissions and copy
+                    this data somewhere to use later. <br>
+                    5. Go to PhpMyAdmin, select the database you created, open the import tab, select the streamapp.sql
+                    file located in the database folder of the Laravel project, click GO. <br>
+                    6. Go to the Laravel project and rename the .env.example file to .env and the public folder to
+                    public_html <br>
+                    7. Open the .env file and modify the corresponding environment variables: DB_DATABASE, DB_USERNAME,
+                    DB_PASSWORD <br>
+                    8. In the terminal, run the command <strong>php artisan key: generate</strong> <br>
+                    9. compress all the files of the laravel project into a .zip file <br>
+                    10. Go to the Cpanel and open the File Manager, in the root directory click on upload, select or
+                    drag the .zip with the project. <br>
+                    11. At the end of the upload, go back to the File Manager and extract the .zip file <br>
+                    12. Congratulations, you already have the admin panel installed in Cpanel.</blockquote>
+
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/deploy-cpanel.mp4" type="video/mp4">
+                </video>
+
+
+
+            </div>
+            <div id="using" class="section scrollspy">
+                <h3>Using Admin Panel</h3>
+                <p>Now, we access the VPS address from the browser and we can see the administration panel.<br>
+
+                    <br>Default access data:
+
+                    <blockquote>user: admin@streamapp.test<br>
+                        password: 123456</blockquote>
+                </p>
+                <img class="responsive-img" src="./assets/images/admin-panel-login.png">
+
+                <p>To change account information such as name, email or password, just click on the vertical more icon
+                    in the upper right corner, and use the corresponding forms.
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/account-update.mp4" type="video/mp4">
+                </video>
+
+                <p>Before starting to create movies or series we must add the servers that we will use.
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/server-create.mp4" type="video/mp4">
+                </video>
+
+                <p>To create a movie or series press the add button, search <a href="https://www.themoviedb.org"
+                        target="_blank">themoviedb.org</a> for the movie or series and copy the ID, in the form paste
+                    the ID and press search. With that matter all the information includes the title, overview, preview,
+                    etc. Below you can add all the corresponding videos.
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/movies-series-create.mp4" type="video/mp4">
+                </video>
+
+            </div>
+            <div id="tmdb" class="section scrollspy">
+                <h3>Setup ThemovieDB</h3>
+                <p>We already use the autoimport with ThemovieDB api, however this is configured with a default API key
+                    that has limitations in use. To make sure you use a unique API key, you must <a
+                        href="https://www.themoviedb.org/account/signup" target="_blank">register an account at
+                        themoviedb.org</a>, go to the settings and in the API tab request your API key and paste it in
+                    the administration panel settings.
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/tmdb-api-key.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="firebase" class="section scrollspy">
+                <h3>Setup Firebase</h3>
+
+                <p>We go to the <a href="https://console.firebase.google.com" target="_blank">firebase console</a>, and
+                    create a our project, enabling Analitycs. This process may take
+                    time... Once created we must add an application.<br>
+
+                        <br> Android:
+
+                        <blockquote>
+                        To register the app we must fill in the Android package name field with a name that is unique
+                        throughout the PlayStore, so it is recommended to use the inverted domain with the name of the
+                        app, such as com.example.streamapp, press register app <br>
+
+                        <br> Download the google-services.json file and save it somewhere to use it
+                        later in our flutter project, press next <br>
+
+                        <br> In this step we explain how to add the SDK to our android application,
+                        this step is omitted because the flutter project already has the flutter SDK integrated, press
+                        next. <br>
+
+                        <br> Press Skip this step.
+                    </blockquote>
+
+                    iOs:
+                                            
+                        <blockquote>
+
+                        To register the app we must fill in the iOS bundle ID field with a name
+                        that is unique throughout the AppStore, so it is recommended to use the inverted domain with the
+                        name of the app, such as com.example.streamapp. press register app. <br>
+
+                        <br>Download the file GoogleService-Info.plist and save it somewhere to use
+                        it later in our flutter project, press next <br>
+
+                        <br>In this step we are explained how to add the SDK to our iOs application,
+                        this step is omitted because the flutter project already has the flutter SDK integrated, press
+                        next. <br>
+
+                        <br>Press Next. <br>
+
+                        <br>Press Skip this step. <br>
+                    </blockquote>
+
+                    Now to get the FCM server key we go to Project settings, and in the
+                    cloud messaging tab we copy the server key token, This we must paste it in the settings of our
+                    administration panel.</p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/firebase-setup.mp4" type="video/mp4">
+                </video>
+
+                <p>For iOs, An Apple Push Notification Authentication Key is necessary, you can follow the firebase
+                    documentation in this case.
+                    <blockquote> is important that the App ID is the same as the one you used when adding the app to
+                        firebase in the previous step and the Create the Provisioning Profile step is optional.
+                        <br><a href="https://firebase.google.com/docs/cloud-messaging/ios/certs"
+                            target="_blank">https://firebase.google.com/docs/cloud-messaging/ios/certs</a></blockquote>
+                    After downloading your .p8 key and creating your App ID you must go to project settings, to the
+                    firebase cloud messaging tab, in the iOS app configuration section you must upload your APN key.
+                </p>
+                <img class="responsive-img" src="./assets/images/apn-key-upload.png">
+
+            </div>
+            <div id="admob" class="section scrollspy">
+                <h3>Set up Admob</h3>
+                <p>We go to the <a href="https://apps.admob.com/v2/apps/list" target="_blank">AdMob dashboard</a>, and
+                    add our Android and iOs Apps.<br>
+                    <blockquote>
+                        Press add app. <br>
+                        select that our app is NOT published. <br>
+                        Write the name of the app and select the platform. <br>
+                        We already have our Ad App ID, now we must create the Ad Units ID, by pressing Next: create ad
+                        unit.
+                        select in the format we want. <br>
+                        We write a name and press create ad unit.
+                    </blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/admob-setup.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="flutter" class="section scrollspy">
+                <h3>Install Flutter</h3>
+                <p>You need to download and install:
+                    <blockquote>
+                        <ol>
+                            <li><a href="https://git-scm.com/downloads" target="_blank">GIT</a></li>
+                            <li><a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter SDK</a>
+                            </li>
+                            <li><a href="https://developer.android.com/studio" target="_blank">Android Studio</a></li>
+                            <li><a href="https://flutter.dev/docs/get-started/editor" target="_blank">Flutter and Dart
+                                    plugins</a></li>
+                        </ol>
+                    </blockquote>
+            </div>
+            <div id="keystore" class="section scrollspy">
+                <h3>Create keystore</h3>
+                <p>We will also need a keystore to sign our apk, you can see the official documentation, in the
+                    Create a keystore section.
+
+                    <blockquote>https://flutter.dev/docs/deployment/android</blockquote>
+
+                    In Windows we open the PowerShell as administrator by pressing Windows + X and selecting Windows
+                    PowerShell (admin) and running the command
+
+                    <blockquote>keytool -genkey -v -keystore c:/key.jks -keyalg RSA -keysize 2048 -validity 10000
+                        -alias key</blockquote>
+
+                    in MacOS and Linux we run this command in the terminal
+
+                    <blockquote>keytool -genkey -v -keystore ~/key.jks -keyalg RSA -keysize 2048 -validity 10000
+                        -alias key</blockquote>
+                </p>
+
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/keystore.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="app" class="section scrollspy">
+                <h3>Set up App</h3>
+                <p>We open the project of the app in Android Studio, it is the flutter folder of your download. when
+                    starting it does not find the packages and dependencies, for which we have to run the command
+
+                    <blockquote>flutter packages get</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/flutter-packages.mp4" type="video/mp4">
+                </video>
+                <p>Then to change the name of the package the fastest and easiest option is to use the Android Studio
+                    replace, for this
+                    <blockquote>we go to the android/app/src/main directory and open AndroidManifest.xml, select
+                        com.example.streamapp and press CTRL + SHIFT + R and replace with the package name we registered
+                        in the firebase step.</blockquote>
+                    Now to change the name in our android app we must change:
+
+                    <blockquote>android:label="App Name"</blockquote>
+                    to ensure the operation of the app and the ads in the meta-data tag it is necessary to
+                    <blockquote>&ltmeta-data <br>
+                        android:name="com.google.android.gms.ads.APPLICATION_ID" <br>
+                        android:value="ADMOB APP ID HERE"/></blockquote>
+
+                    for Firebase configuration with our Android app
+
+                    <blockquote>the google-services.json file that we obtained when adding the Android app in firebase
+                        we paste it in the android/app directory</blockquote>
+
+                    to sign the apk you need to a new file in the android directory with the name <b>key.properties</b>
+
+                    <blockquote>
+                        storePassword=password <br>
+                        keyPassword=password <br>
+                        keyAlias=key <br>
+                        storeFile=path to key.jks
+                    </blockquote>
+
+                    For iOS we go to the ios/Runner directory and open the file info.plist
+                    <br>
+                    To change the name, we modify the value of CFBundleName.
+
+                    <blockquote>
+                        &ltkey> CFBundleName &lt/key> <br>
+                        &ltstring> App Name &lt/string>
+                    </blockquote>
+
+                    and modify the value of GADApplicationIdentifier with the admob app id of ios.
+
+                    <blockquote>
+                        &ltkey> GADApplicationIdentifier &lt/key> <br>
+                        &ltstring> ADMOB IOS APP ID HERE &lt/string>
+                    </blockquote>
+
+                    for Firebase configuration with our iOs app
+
+                    <blockquote>the GoogleService-Info.plist file that we obtained when adding the iOs app in firebase
+                        we paste it in the ios/Runner directory</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/app-setup.mp4" type="video/mp4">
+                </video>
+
+                <p>
+                    we need to reference the app to the VPS, for this we go to the lib/src/helpers directory and
+                    open the api.dart file, we must change the URL to the VPS IP or if you have it, the domain.
+
+                    <blockquote>static final String url = 'http://IP OR DOMAIN HERE'+'/api/';</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/api-url.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="icons" class="section scrollspy">
+                <h3>Build Icons</h3>
+                <p>
+                    For this we will need the PNG application icon with a minimum size of 300x300 and a maximum of
+                    1000x1000. and For the SplashScreen of iOs it is necessary in 3 dimensions with these names
+
+                    <blockquote>LaunchImage.png: 768 x 1024 <br>
+                        LaunchImage@2x.png: 1536 x 2048 <br>
+                        LaunchImage@3x.png: 2304 x 3072 </blockquote>
+
+                    first
+
+                    <blockquote>we paste our icon in the assets/icon directory</blockquote>
+
+                    and the 3 SplashScreen of iOs in the directory
+
+                    <blockquote>ios/Runner/Assets.xcassets/LaunchImage.imageset</blockquote>
+
+                    to generate the icons of our app in the different resolutions of both platforms we open the terminal
+                    and run the command
+
+                    <blockquote>flutter packages pub run flutter_launcher_icons:main</blockquote>
+
+                    Then the easiest way to configure the SplashScreen on Android is
+
+                    <blockquote>copy the ic_launcher.png icon from the android/app/src/main/res/mipmap-xxxhdpi directory
+                        and paste it into the android/app/src/main/res/drawable directory</blockquote>
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/setup-icons.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="build" class="section scrollspy">
+                <h3>Build App</h3>
+                <p>
+                    to compile the production apk of our Android app we just have to run the command
+
+                    <blockquote>flutter build apk --release </blockquote>
+
+                    and we will get our apk in the build/app/outputs/apk/release directory with the name of
+                    app-release.apk
+                </p>
+                <video class="responsive-video" controls>
+                    <source src="./assets/videos/build-apk.mp4" type="video/mp4">
+                </video>
+                <p>
+
+                    <br>To generate the version of iOs it is necessary to have MacOS and Xcode, for more details check
+                    the official flutter documentation:
+
+                    <blockquote><a
+                            href="https://flutter.dev/docs/deployment/ios#create-an-application-record-on-app-store-connect"
+                            target="_blank">https://flutter.dev/docs/deployment/ios#create-an-application-record-on-app-store-connect</a>
+                    </blockquote>
+                </p>
+            </div>
+
+            <br>
+            <hr>
+            <p>Once again, thank you so much for purchasing this app. As I said at the beginning, I'd be glad to help
+                you if you have any questions relating to this theme. No guarantees, but I'll do my best to assist. If
+                you have a more general question relating to the apps on CodeCanyon, you might consider visiting the
+                forums and asking your question in the "Item Discussion" section. <br>
+                <br>Jennsen Ramos.</p>
+
+
+        </div>
+    </div>
+
+    </div>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="assets/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.scrollspy');
+            var instances = M.ScrollSpy.init(elems, {
+                scrollOffset: 0
+            });
+        });
+    </script>
+</body>
+
+</html>
